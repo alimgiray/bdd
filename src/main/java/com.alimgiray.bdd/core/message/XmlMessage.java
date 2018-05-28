@@ -1,59 +1,72 @@
 package com.alimgiray.bdd.core.message;
 
 
-import org.w3c.dom.Document;
 import org.xembly.Directives;
 import org.xembly.Xembler;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class XmlMessage {
 
-    private XmlField header;
-    private XmlField body;
+    private List<XmlField> header;
+    private List<XmlField> body;
 
     private Namespace soapenv;
     private static final String SOAP_NS_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 
     public XmlMessage() {
         this.soapenv = new Namespace("soapenv", SOAP_NS_URI);
+        this.header = new ArrayList<>();
+        this.body = new ArrayList<>();
     }
 
 
-
-    public XmlField getBody() {
-        return body;
-    }
-
-    public void setBody(XmlField body) {
-        this.body = body;
-    }
-
-    public XmlField getHeader() {
+    public List<XmlField> getHeader() {
         return header;
     }
 
-    public void setHeader(XmlField header) {
-        this.header = header;
+    public void addFieldToHeader(XmlField headerElement) {
+        this.header.add(headerElement);
     }
+
+    public void addFieldsToHeader(XmlField... headerElements) {
+        for (XmlField headerElement : headerElements) {
+            this.addFieldToHeader(headerElement);
+        }
+    }
+
+    public List<XmlField> getBody() {
+        return body;
+    }
+
+    public void addFieldToBody(XmlField bodyElement) {
+        this.body.add(bodyElement);
+    }
+
+    public void addFieldsToBody(XmlField... bodyElements) {
+        for (XmlField bodyElement : bodyElements) {
+            this.addFieldToBody(bodyElement);
+        }
+    }
+
 
     @Override
     public String toString() {
         ComplexXmlField envelope = new ComplexXmlField("Envelope");
+        ComplexXmlField header = new ComplexXmlField("Header");
+        ComplexXmlField body = new ComplexXmlField("Body");
+        for (XmlField headerElement : this.header) {
+            header.addField(headerElement);
+        }
+        for (XmlField bodyElement : this.body) {
+            body.addField(bodyElement);
+        }
         envelope.setNamespace(this.soapenv);
-        this.header.setNamespace(this.soapenv);
-        this.body.setNamespace(this.soapenv);
-        envelope.addField(this.header);
-        envelope.addField(this.body);
+        header.setNamespace(this.soapenv);
+        body.setNamespace(this.soapenv);
+        envelope.addField(header);
+        envelope.addField(body);
         Directives directives = new Directives();
         build(envelope, directives);
         String soapEnvelope = "";
