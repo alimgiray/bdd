@@ -4,7 +4,7 @@ import com.alimgiray.bdd.core.database.Database;
 
 import java.sql.SQLException;
 
-public class Application {
+public class DbTest {
 
     public static void main(String[] args) {
         setupDatabase();

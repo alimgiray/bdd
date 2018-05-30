@@ -25,4 +25,17 @@ public class Database {
         }
     }
 
+    public static String selectFieldFromTableWithWhere(String tableName, String columnName, String fieldName, String whereClause) {
+        try {
+            ResultSet resultSet = connection.createStatement()
+                    .executeQuery("SELECT * FROM " + tableName + " WHERE " + fieldName + "=" + whereClause);
+            if (resultSet.next()) {
+                return (String) resultSet.getObject(columnName);
+            }
+            return null;
+        } catch (SQLException e) {
+            return null;
+        }
+    }
+
 }

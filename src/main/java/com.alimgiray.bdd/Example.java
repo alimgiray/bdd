@@ -22,6 +22,7 @@ import java.time.LocalDateTime;
  * @since 28.05.2018
  */
 public class Example {
+
     public static void main(String[] args) {
         Namespace ns0 = new Namespace("ns0", "http://10.10.10.71:8080/xporter/services");
         ComplexXmlField user = new ComplexXmlField("user");
