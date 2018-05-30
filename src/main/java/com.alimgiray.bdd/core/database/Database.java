@@ -8,13 +8,11 @@ import java.sql.SQLException;
 public class Database {
 
     private static Connection connection;
-    private static final String URL = System.getenv("databaseUrl");
-    private static final String USERNAME = System.getenv("databaseUsername");
-    private static final String PASSWORD = System.getenv("databasePassword");
 
-    public static void setupConnection() throws SQLException, ClassNotFoundException  {
+    public static void setupConnection(String url, String username, String password)
+            throws SQLException, ClassNotFoundException  {
         Class.forName(JdbcDrivers.ORACLE.getClassName());
-        connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
+        connection = DriverManager.getConnection(url, username, password);
     }
 
     public static String selectQuery(String sql, String columnName) {
