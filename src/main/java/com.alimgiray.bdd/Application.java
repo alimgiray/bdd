@@ -1,6 +1,7 @@
 package com.alimgiray.bdd;
 
 import com.alimgiray.bdd.core.database.Database;
+import com.alimgiray.bdd.core.database.Query;
 
 import java.sql.SQLException;
 
@@ -8,7 +9,7 @@ public class Application {
 
     public static void main(String[] args) {
         setupDatabase();
-        String s = Database.selectFieldFromTableWithWhere("PARAMETER", "NAME", "ID", "41");
+        String s = new Query().select("NAME").from("PARAMETER").where("ID").is("41").getResult();
         System.out.println(s);
     }
 

@@ -17,18 +17,9 @@ public class Database {
         connection = DriverManager.getConnection(URL, USERNAME, PASSWORD);
     }
 
-    public static ResultSet selectAllFromTable(String tableName) {
+    public static String selectQuery(String sql, String columnName) {
         try {
-            return connection.createStatement().executeQuery("SELECT * FROM " + tableName);
-        } catch (SQLException e) {
-            return null;
-        }
-    }
-
-    public static String selectFieldFromTableWithWhere(String tableName, String columnName, String fieldName, String whereClause) {
-        try {
-            ResultSet resultSet = connection.createStatement()
-                    .executeQuery("SELECT * FROM " + tableName + " WHERE " + fieldName + "=" + whereClause);
+            ResultSet resultSet = connection.createStatement().executeQuery(sql);
             if (resultSet.next()) {
                 return resultSet.getObject(columnName).toString();
             }
@@ -37,5 +28,4 @@ public class Database {
             return null;
         }
     }
-
 }
