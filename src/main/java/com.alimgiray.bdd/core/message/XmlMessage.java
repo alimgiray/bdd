@@ -21,7 +21,6 @@ public class XmlMessage {
         this.body = new ArrayList<>();
     }
 
-
     public List<XmlField> getHeader() {
         return header;
     }
@@ -50,33 +49,40 @@ public class XmlMessage {
         }
     }
 
-
     @Override
     public String toString() {
+
         ComplexXmlField envelope = new ComplexXmlField("Envelope");
         ComplexXmlField header = new ComplexXmlField("Header");
         ComplexXmlField body = new ComplexXmlField("Body");
+
         for (XmlField headerElement : this.header) {
             header.addField(headerElement);
         }
+
         for (XmlField bodyElement : this.body) {
             body.addField(bodyElement);
         }
+
         envelope.setNamespace(this.soapenv);
         header.setNamespace(this.soapenv);
         body.setNamespace(this.soapenv);
+
         envelope.addField(header);
         envelope.addField(body);
+
         Directives directives = new Directives();
         build(envelope, directives);
+
         String soapEnvelope = "";
+
         try {
             soapEnvelope = new Xembler(directives).xml();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return soapEnvelope;
 
+        return soapEnvelope;
     }
 
     private void build(XmlField field, Directives directives) {

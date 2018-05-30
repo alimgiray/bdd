@@ -5,4 +5,7 @@ package com.alimgiray.bdd.core.assertion;
  * @since 30.05.2018 10:51
  */
 public interface Step {
+
+    void run();
+
 }

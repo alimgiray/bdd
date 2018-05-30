@@ -13,7 +13,6 @@ public class PortOut extends Feature {
 
         addScenario(new NumaraTaşıma());
 
-
     }
 
 }

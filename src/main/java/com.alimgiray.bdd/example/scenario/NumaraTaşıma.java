@@ -13,7 +13,7 @@ public class NumaraTaşıma extends Scenario {
     public NumaraTaşıma() {
         given(new Action());
         when(new Action());
-        then(new Validation());
+        then(new Validation(null, null));
     }
 
 }
