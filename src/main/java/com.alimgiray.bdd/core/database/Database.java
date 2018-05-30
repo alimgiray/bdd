@@ -30,7 +30,7 @@ public class Database {
             ResultSet resultSet = connection.createStatement()
                     .executeQuery("SELECT * FROM " + tableName + " WHERE " + fieldName + "=" + whereClause);
             if (resultSet.next()) {
-                return (String) resultSet.getObject(columnName);
+                return resultSet.getObject(columnName).toString();
             }
             return null;
         } catch (SQLException e) {
