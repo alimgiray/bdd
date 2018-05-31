@@ -1,9 +1,5 @@
-import com.alimgiray.bdd.core.message.Attribute;
-import com.alimgiray.bdd.core.message.ComplexXmlField;
-import com.alimgiray.bdd.core.message.Namespace;
-import com.alimgiray.bdd.core.message.SimpleXmlField;
-import com.alimgiray.bdd.core.message.SoapDataType;
-import com.alimgiray.bdd.core.message.SoapMessage;
+package com.alimgiray.bdd.core.message;
+
 import org.jdom2.JDOMException;
 import org.junit.Test;
 
@@ -25,6 +21,7 @@ public class XmlMessageTest {
         SimpleXmlField transTime = getTransTimeField();
 
         SoapMessage soapMessage = getSoapMessage(user, transTime);
+        System.out.println(soapMessage.toString());
         SoapMessage soapMessageFromString = new SoapMessage(soapMessage.toString());
 
         assertEquals("İki mesaj birebir aynı olmalı",
@@ -35,10 +32,13 @@ public class XmlMessageTest {
 
     private SoapMessage getSoapMessage(ComplexXmlField user, SimpleXmlField transTime) {
 
-        SoapMessage soapMessage = new SoapMessage();
-        soapMessage.addFieldToHeader(transTime);
-        soapMessage.addFieldToBody(user);
-        return soapMessage;
+        ComplexXmlField header = new ComplexXmlField("header");
+        header.addField(transTime);
+
+        ComplexXmlField body = new ComplexXmlField("body");
+        body.addField(user);
+
+        return new SoapMessage(header, body);
     }
 
     private SimpleXmlField getTransTimeField() {

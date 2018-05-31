@@ -17,6 +17,7 @@ public class ComplexXmlField extends XmlField {
     }
 
     public void addField(XmlField xmlField) {
+        if (xmlField == null) return;
         xmlField.setParent(this);
         xmlFields.add(xmlField);
     }
