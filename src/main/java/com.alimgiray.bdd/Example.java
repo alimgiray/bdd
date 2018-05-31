@@ -6,15 +6,9 @@ import com.alimgiray.bdd.core.message.Namespace;
 import com.alimgiray.bdd.core.message.SimpleXmlField;
 import com.alimgiray.bdd.core.message.SoapDataType;
 import com.alimgiray.bdd.core.message.XmlMessage;
-import org.w3c.dom.Document;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
+import org.jdom2.JDOMException;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 import java.io.IOException;
-import java.io.StringReader;
 import java.time.LocalDateTime;
 
 /**
@@ -24,6 +18,7 @@ import java.time.LocalDateTime;
 public class Example {
 
     public static void main(String[] args) {
+        //TODO: Burayı teste alabilir miyiz acaba?
         Namespace ns0 = new Namespace("ns0", "http://10.10.10.71:8080/xporter/services");
         ComplexXmlField user = new ComplexXmlField("user");
         user.setNamespace(ns0);
@@ -51,17 +46,15 @@ public class Example {
         signup.addFieldToBody(user);
         System.out.println(signup.toString());
 
-
+        XmlMessage message = null;
+        try {
+            message = new XmlMessage(signup.toString());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JDOMException e) {
+            e.printStackTrace();
+        }
+        System.out.println(message.toString());
 
     }
-
-    public static Document build(String xml) throws ParserConfigurationException, IOException, SAXException {
-
-        DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        InputSource is = new InputSource(new StringReader(xml));
-        return builder.parse(is);
-    }
-
-
 }
