@@ -32,6 +32,11 @@
             <version>2.0.6</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.slf4j</groupId>
+            <artifactId>slf4j-log4j12</artifactId>
+            <version>1.6.1</version>
+        </dependency>
 
         <!--DB-->
         <dependency>
@@ -44,6 +49,23 @@
             <artifactId>querydsl-sql</artifactId>
             <version>4.2.1</version>
         </dependency>
+
+        <dependency>
+            <groupId>com.querydsl</groupId>
+            <artifactId>querydsl-sql-codegen</artifactId>
+            <version>4.2.1</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <!--Test-->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.12</version>
+            <scope>test</scope>
+        </dependency>
+
+
 
     </dependencies>
 

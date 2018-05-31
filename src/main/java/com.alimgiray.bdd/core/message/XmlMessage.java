@@ -2,114 +2,57 @@ package com.alimgiray.bdd.core.message;
 
 
 import org.jdom2.Element;
-import org.jdom2.JDOMException;
-import org.jdom2.input.SAXBuilder;
 import org.xembly.Directives;
 import org.xembly.Xembler;
-import org.xml.sax.InputSource;
 
-import java.io.IOException;
-import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class XmlMessage {
 
-    private List<XmlField> header;
-    private List<XmlField> body;
-
-    private ComplexXmlField root;
-
-    private Namespace soapenv;
-    private static final String SOAP_NS_URI = "http://schemas.xmlsoap.org/soap/envelope/";
+    private List<XmlField> xmlFields;
 
     public XmlMessage() {
-        this.soapenv = new Namespace("soapenv", SOAP_NS_URI);
-        this.header = new ArrayList<>();
-        this.body = new ArrayList<>();
-        this.root = new ComplexXmlField("root");
+        this.xmlFields = new ArrayList<>();
     }
 
-    public XmlMessage(String xml) throws IOException, JDOMException {
-        this();
-        SAXBuilder saxBuilder = new SAXBuilder();
-        org.jdom2.Document document = saxBuilder.build(new InputSource(new StringReader(xml)));
-        transformStringToXmlMessage(document.getRootElement(), this.root);
-
-        //Çevirirken header body bakmadan çeviriyor, sonradan çomar gibi headerı soapı set ediyorum burada indexiyle.
-        //FIXME: burayı düşüneceğim
-        ComplexXmlField soapHeader = (ComplexXmlField) ((ComplexXmlField) this.root.getXmlFields().get(0)).getXmlFields().get(0);
-        ComplexXmlField soapBody = (ComplexXmlField) ((ComplexXmlField) this.root.getXmlFields().get(0)).getXmlFields().get(1);
-        for (XmlField headerElement : soapHeader.getXmlFields()) {
-            addFieldToHeader(headerElement);
-        }
-        for (XmlField headerElement : soapBody.getXmlFields()) {
-            addFieldToBody(headerElement);
-        }
+    public List<XmlField> getXmlFields() {
+        return xmlFields;
     }
 
-
-    public List<XmlField> getHeader() {
-        return header;
+    public void addField(XmlField xmlField) {
+        this.xmlFields.add(xmlField);
     }
 
-    public void addFieldToHeader(XmlField headerElement) {
-        this.header.add(headerElement);
-    }
+    public void addFields(XmlField... xmlFields) {
 
-    public void addFieldsToHeader(XmlField... headerElements) {
-        for (XmlField headerElement : headerElements) {
-            this.addFieldToHeader(headerElement);
-        }
-    }
+        Collections.addAll(this.xmlFields, xmlFields);
 
-    public List<XmlField> getBody() {
-        return body;
     }
-
-    public void addFieldToBody(XmlField bodyElement) {
-        this.body.add(bodyElement);
-    }
-
-    public void addFieldsToBody(XmlField... bodyElements) {
-        for (XmlField bodyElement : bodyElements) {
-            this.addFieldToBody(bodyElement);
-        }
-    }
-
 
     @Override
     public String toString() {
-        ComplexXmlField envelope = new ComplexXmlField("Envelope");
-        ComplexXmlField header = new ComplexXmlField("Header");
-        ComplexXmlField body = new ComplexXmlField("Body");
-        for (XmlField headerElement : this.header) {
-            header.addField(headerElement);
-        }
-        for (XmlField bodyElement : this.body) {
-            body.addField(bodyElement);
-        }
-        envelope.setNamespace(this.soapenv);
-        header.setNamespace(this.soapenv);
-        body.setNamespace(this.soapenv);
-        envelope.addField(header);
-        envelope.addField(body);
+
         Directives directives = new Directives();
-        buildDirectives(envelope, directives);
-        String soapEnvelope = "";
+        for (XmlField field : this.xmlFields) {
+
+            buildDirectives(field, directives);
+        }
+        String xmlString = "";
         try {
-            soapEnvelope = new Xembler(directives).xml();
+            xmlString = new Xembler(directives).xml();
         } catch (Exception e) {
             e.printStackTrace();
         }
-        return soapEnvelope;
+        return xmlString;
 
     }
 
-    private void buildDirectives(XmlField field, Directives directives) {
+    void buildDirectives(XmlField field, Directives directives) {
 
         if (field.getClass() == ComplexXmlField.class) {
-            addAndSetNamespaceIfAvailable(field, directives);
+            addTagAndSetNamespaceIfAvailable(field, directives);
             setAttributeIfAvailable(field, directives);
             List<XmlField> xmlFields = ((ComplexXmlField) field).getXmlFields();
             for (XmlField xmlField : xmlFields) {
@@ -117,7 +60,7 @@ public class XmlMessage {
             }
             directives.up();
         } else {
-            addAndSetNamespaceIfAvailable(field, directives);
+            addTagAndSetNamespaceIfAvailable(field, directives);
             setAttributeIfAvailable(field, directives);
             directives.set(((SimpleXmlField) field).getFieldValue())
                     .up();
@@ -133,7 +76,7 @@ public class XmlMessage {
         }
     }
 
-    private void addAndSetNamespaceIfAvailable(XmlField field, Directives directives) {
+    private void addTagAndSetNamespaceIfAvailable(XmlField field, Directives directives) {
         Namespace ns = field.getNamespace();
         if (ns != null) {
             directives.add(ns.getPrefix().concat(":").concat(field.getFieldName()));
@@ -143,20 +86,20 @@ public class XmlMessage {
         }
     }
 
-    private void transformStringToXmlMessage(Element element, XmlField parentField) {
+    void transformStringToXmlMessage(Element element, XmlField parentField) {
 
         if (element.getChildren().isEmpty()) {
             SimpleXmlField simpleXmlField = new SimpleXmlField(element.getName(), SoapDataType.STRING);
             simpleXmlField.setFieldValue(element.getValue());
             addNamespaceIfAvailable(simpleXmlField, element);
-            setAttributeIfAvailable(simpleXmlField, element);
+            addAttributeIfAvailable(simpleXmlField, element);
             ((ComplexXmlField) parentField).addField(simpleXmlField);
 
         } else {
             ComplexXmlField complexXmlField = new ComplexXmlField(element.getName());
             ((ComplexXmlField) parentField).addField(complexXmlField);
             addNamespaceIfAvailable(complexXmlField, element);
-            setAttributeIfAvailable(complexXmlField, element);
+            addAttributeIfAvailable(complexXmlField, element);
             parentField = complexXmlField;
             for (Element childElement : element.getChildren()) {
                 transformStringToXmlMessage(childElement, parentField);
@@ -171,7 +114,7 @@ public class XmlMessage {
         }
     }
 
-    private void setAttributeIfAvailable(XmlField field, Element element) {
+    private void addAttributeIfAvailable(XmlField field, Element element) {
         if (element.hasAttributes()) {
             for (org.jdom2.Attribute attribute : element.getAttributes()) {
                 Attribute attributeToAdd = new Attribute(attribute.getName(),attribute.getValue());

@@ -1,24 +1,25 @@
-package com.alimgiray.bdd;
-
 import com.alimgiray.bdd.core.message.Attribute;
 import com.alimgiray.bdd.core.message.ComplexXmlField;
 import com.alimgiray.bdd.core.message.Namespace;
 import com.alimgiray.bdd.core.message.SimpleXmlField;
 import com.alimgiray.bdd.core.message.SoapDataType;
-import com.alimgiray.bdd.core.message.XmlMessage;
+import com.alimgiray.bdd.core.message.SoapMessage;
 import org.jdom2.JDOMException;
+import org.junit.Test;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
 
+import static org.junit.Assert.assertEquals;
+
 /**
  * @author ahmyilmaz
- * @since 28.05.2018
+ * @since 31.05.2018
  */
-public class Example {
+public class XmlParseTest {
+    @Test
+    public void xmlStringToXmlMessageTest() {
 
-    public static void main(String[] args) {
-        //TODO: Burayı teste alabilir miyiz acaba?
         Namespace ns0 = new Namespace("ns0", "http://10.10.10.71:8080/xporter/services");
         ComplexXmlField user = new ComplexXmlField("user");
         user.setNamespace(ns0);
@@ -37,24 +38,17 @@ public class Example {
         SimpleXmlField transtime = new SimpleXmlField("transtime", SoapDataType.STRING);
         transtime.setFieldValue(LocalDateTime.now().toString());
 
-        XmlMessage signup = new XmlMessage();
-        ComplexXmlField header = new ComplexXmlField("Header");
-        ComplexXmlField body = new ComplexXmlField("Body");
-        header.addField(transtime);
-        body.addField(user);
-        signup.addFieldToHeader(transtime);
-        signup.addFieldToBody(user);
-        System.out.println(signup.toString());
+        SoapMessage signupMessage = new SoapMessage();
+        signupMessage.addFieldToHeader(transtime);
+        signupMessage.addFieldToBody(user);
 
-        XmlMessage message = null;
+        SoapMessage signupMessageFromString = null;
         try {
-            message = new XmlMessage(signup.toString());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JDOMException e) {
+            signupMessageFromString = new SoapMessage(signupMessage.toString());
+        } catch (IOException | JDOMException e) {
             e.printStackTrace();
         }
-        System.out.println(message.toString());
-
+        assertEquals("String Xml'den oluşturulan mesajla ilk mesaj uyuşmuyor",signupMessage.toString(),signupMessageFromString.toString());
     }
+
 }
