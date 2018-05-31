@@ -9,7 +9,7 @@ public class ComplexXmlField extends XmlField {
 
     public ComplexXmlField(String fieldName) {
         super(fieldName);
-        xmlFields = new ArrayList<XmlField>();
+        xmlFields = new ArrayList<>();
     }
 
     public List<XmlField> getXmlFields() {

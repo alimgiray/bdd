@@ -1,6 +1,5 @@
 package com.alimgiray.bdd.core.message;
 
-import org.jdom2.Element;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
 import org.xembly.Directives;
@@ -16,7 +15,8 @@ import java.util.List;
  * @author ahmyilmaz
  * @since 31.05.2018
  */
-public class SoapMessage extends XmlMessage{
+public class SoapMessage extends XmlMessage {
+
     private List<XmlField> header;
     private List<XmlField> body;
 
@@ -36,7 +36,7 @@ public class SoapMessage extends XmlMessage{
         this();
         SAXBuilder saxBuilder = new SAXBuilder();
         org.jdom2.Document document = saxBuilder.build(new InputSource(new StringReader(xml)));
-        super.transformStringToXmlMessage(document.getRootElement(), this.root);
+        super.createFromString(document.getRootElement(), this.root);
 
         //Çevirirken header body bakmadan çeviriyor, sonradan çomar gibi headerı bodyi set ediyorum burada indexiyle.
         //FIXME: burayı düşüneceğim
@@ -79,7 +79,6 @@ public class SoapMessage extends XmlMessage{
         }
     }
 
-
     @Override
     public String toString() {
         ComplexXmlField envelope = new ComplexXmlField("Envelope");
@@ -107,9 +106,4 @@ public class SoapMessage extends XmlMessage{
         return soapEnvelope;
 
     }
-
-
-
-
-
 }

@@ -5,6 +5,7 @@ package com.alimgiray.bdd.core.message;
  * @since 28.05.2018
  */
 public class Namespace {
+
     private final String uri;
     private final String prefix;
 
