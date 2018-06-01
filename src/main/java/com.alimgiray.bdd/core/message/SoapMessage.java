@@ -38,8 +38,7 @@ public class SoapMessage extends XmlMessage {
         ComplexXmlField root = new ComplexXmlField("Envelope");
         createFromString(document.getRootElement(), root);
 
-        this.envelope = root;
-        this.addField(this.envelope);
+        this.addField(root.getXmlFields().get(0));
     }
 
     private void setup() {

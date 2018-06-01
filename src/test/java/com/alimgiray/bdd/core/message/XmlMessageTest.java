@@ -21,7 +21,6 @@ public class XmlMessageTest {
         SimpleXmlField transTime = getTransTimeField();
 
         SoapMessage soapMessage = getSoapMessage(user, transTime);
-        System.out.println(soapMessage.toString());
         SoapMessage soapMessageFromString = new SoapMessage(soapMessage.toString());
 
         assertEquals("İki mesaj birebir aynı olmalı",
