@@ -1,7 +1,12 @@
 package com.alimgiray.bdd.example;
 
 import com.alimgiray.bdd.core.database.Database;
+import com.alimgiray.bdd.core.message.SoapMessage;
+import com.alimgiray.bdd.core.message.fields.Namespace;
+import com.alimgiray.bdd.core.message.fields.SimpleXmlField;
+import com.alimgiray.bdd.core.message.fields.SoapDataType;
 import com.alimgiray.bdd.core.subject.Product;
+import com.alimgiray.bdd.core.subject.SoapClient;
 import com.alimgiray.bdd.example.xporter.WsEndpoint;
 import com.alimgiray.bdd.example.xporter.XPorter;
 
@@ -23,6 +28,19 @@ public class Runner {
         loadProperties();
         setupDatabase();
         setupProduct();
+
+        SoapClient soapClient = new SoapClient(product.getEndpoints().get(0).getUrl());
+        try {
+            SimpleXmlField header = new SimpleXmlField("Header", SoapDataType.STRING);
+            header.setFieldValue("adfasdfasdf");
+            SimpleXmlField body = new SimpleXmlField("Body", SoapDataType.STRING);
+            body.setFieldValue("adfasdfasdf");
+            body.setNamespace(new Namespace("soapenv", ""));
+            header.setNamespace(new Namespace("soapenv", ""));
+            soapClient.send(new SoapMessage(header, body));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
     }
 

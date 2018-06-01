@@ -1,6 +1,7 @@
 package com.alimgiray.bdd.core.message;
 
 
+import com.alimgiray.bdd.core.message.fields.*;
 import org.jdom2.Element;
 import org.xembly.Directives;
 import org.xembly.Xembler;

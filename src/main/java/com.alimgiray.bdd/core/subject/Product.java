@@ -17,6 +17,10 @@ public class Product {
         endpoints = new ArrayList<>();
     }
 
+    public List<Endpoint> getEndpoints() {
+        return endpoints;
+    }
+
     public void addEndpoint(Endpoint endpoint) {
         endpoints.add(endpoint);
     }

@@ -1,6 +1,5 @@
 package com.alimgiray.bdd.example.message;
 
-import com.alimgiray.bdd.core.message.ComplexXmlField;
 import com.alimgiray.bdd.core.message.XmlMessage;
 
 /**

@@ -1,4 +1,4 @@
-package com.alimgiray.bdd.core.message;
+package com.alimgiray.bdd.core.message.fields;
 
 /**
  * @author ahmyilmaz

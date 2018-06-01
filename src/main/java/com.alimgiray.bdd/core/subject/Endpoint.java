@@ -14,4 +14,7 @@ public class Endpoint {
         this.url = url;
     }
 
+    public String getUrl() {
+        return url;
+    }
 }

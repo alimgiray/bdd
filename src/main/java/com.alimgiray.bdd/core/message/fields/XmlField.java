@@ -1,4 +1,4 @@
-package com.alimgiray.bdd.core.message;
+package com.alimgiray.bdd.core.message.fields;
 
 import java.util.ArrayList;
 import java.util.List;

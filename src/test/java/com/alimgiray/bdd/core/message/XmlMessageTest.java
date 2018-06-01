@@ -1,5 +1,6 @@
 package com.alimgiray.bdd.core.message;
 
+import com.alimgiray.bdd.core.message.fields.*;
 import org.jdom2.JDOMException;
 import org.junit.Test;
 

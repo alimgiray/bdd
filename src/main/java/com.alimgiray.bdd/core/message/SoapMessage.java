@@ -1,16 +1,15 @@
 package com.alimgiray.bdd.core.message;
 
+import com.alimgiray.bdd.core.message.fields.ComplexXmlField;
+import com.alimgiray.bdd.core.message.fields.Namespace;
+import com.alimgiray.bdd.core.message.fields.XmlField;
 import org.jdom2.Document;
 import org.jdom2.JDOMException;
 import org.jdom2.input.SAXBuilder;
-import org.xembly.Directives;
-import org.xembly.Xembler;
 import org.xml.sax.InputSource;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * @author ahmyilmaz
@@ -19,9 +18,13 @@ import java.util.List;
 public class SoapMessage extends XmlMessage {
 
     private ComplexXmlField envelope;
+    private XmlField header;
+    private XmlField body;
     private static final String SOAP_NS_URI = "http://schemas.xmlsoap.org/soap/envelope/";
 
     public SoapMessage(XmlField header, XmlField body) {
+        this.header = header;
+        this.body = body;
         setup();
 
         envelope.addField(header);
